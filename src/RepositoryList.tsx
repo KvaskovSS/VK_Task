@@ -7,10 +7,29 @@ const RepositoryList: React.FC = observer(() => {
     const { repos, loading, setLoading, addRepos } = repoStore;
 
     const fetchRepos = async () => {
+        if (loading) return;
         setLoading(true);
-        const response = await fetch(`https://api.github.com/repositories?per_page=10&page=${repos.length / 10 + 1}`);
+
+        console.log('Запрос на загрузку репозиториев...');
+        
+        const response = await fetch(`https://api.github.com/repositories?per_page=10&page=${Math.floor(repos.length / 10) + 1}`);
+
+       
+        if (!response.ok) {
+            console.error('Ошибка при загрузке репозиториев:', response.statusText);
+            setLoading(false);
+            return;
+        }
+
         const data: Repo[] = await response.json();
-        addRepos(data); 
+        
+        if (data.length > 0) {
+            console.log('Новые репозитории загружены:', data);
+            addRepos(data);
+        } else {
+            console.log('Нет новых репозиториев для загрузки.');
+        }
+        
         setLoading(false);
     };
 
@@ -19,8 +38,8 @@ const RepositoryList: React.FC = observer(() => {
     }, []);
 
     const handleScroll = () => {
-        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300 && !loading) {
-            console.log('loading more');
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 && !loading) {
+            console.log('Прокрутка вниз, загружаем новые репозитории...');
             fetchRepos();
         }
     };
