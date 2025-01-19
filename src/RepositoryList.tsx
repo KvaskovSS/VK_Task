@@ -1,25 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { observer } from 'mobx-react';
+import repoStore from './RepoStore';
+import RepoItem from './RepoItem';
 
-const RepositoryList = () => {
-    const [repos, setRepos] = useState([]);
-    const [page, setPage] = useState(1);
-    const [loading, setLoading] = useState(false);
+const RepositoryList: React.FC = observer(() => {
+    const { repos, loading, setLoading, addRepos } = repoStore;
 
     const fetchRepos = async () => {
         setLoading(true);
-        const response = await fetch(`https://api.github.com/repositories?per_page=10&page=${page}`);
-        const data = await response.json();
-        setRepos(prevRepos => [...prevRepos, ...data]);
+        const response = await fetch(`https://api.github.com/repositories?per_page=10&page=${repos.length / 10 + 1}`);
+        const data: Repo[] = await response.json();
+        addRepos(data); 
         setLoading(false);
     };
 
     useEffect(() => {
         fetchRepos();
-    }, [page]);
+    }, []);
 
     const handleScroll = () => {
-        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 && !loading) {
-            setPage(prevPage => prevPage + 1);
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300 && !loading) {
+            console.log('loading more');
+            fetchRepos();
         }
     };
 
@@ -33,12 +35,12 @@ const RepositoryList = () => {
             <h1>Список репозиториев GitHub</h1>
             <ul>
                 {repos.map(repo => (
-                    <li key={repo.id}>{repo.name}</li>
+                    <RepoItem key={repo.id} id={repo.id} name={repo.name} />
                 ))}
             </ul>
             {loading && <p>Загрузка...</p>}
         </div>
     );
-};
+});
 
 export default RepositoryList;
