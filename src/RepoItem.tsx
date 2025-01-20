@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { observer } from 'mobx-react';
 import repoStore from './RepoStore';
+import { ListItem, ListItemText, Button, TextField } from '@mui/material';
 
 interface RepoItemProps {
     id: number;
@@ -26,21 +27,51 @@ const RepoItem: React.FC<RepoItemProps> = observer(({ id, name }) => {
     };
 
     return (
-        <li>
+        <ListItem>
             {isEditing ? (
-                <input 
-                    type="text" 
+                <TextField 
                     value={newName} 
                     onChange={(e) => setNewName(e.target.value)} 
+                    variant="outlined" 
+                    size="small" 
+                    InputProps={{
+                        style: { color: 'white' },
+                    }}
+                    InputLabelProps={{
+                        style: { color: 'white' }, 
+                    }}
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: 'white',
+                            },
+                            '&:hover fieldset': {
+                                borderColor: 'white',
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: 'white', 
+                            },
+                        },
+                    }}
                 />
             ) : (
-                <span>{name}</span>
+                <ListItemText primary={name} />
             )}
-            <button onClick={handleEditToggle}>
+            <Button 
+                onClick={handleEditToggle} 
+                color="primary" 
+                sx={{ color: 'white', '&:hover': { backgroundColor: '#f0f0f0', color: 'black' } }} 
+            >
                 {isEditing ? 'Сохранить' : 'Редактировать'}
-            </button>
-            <button onClick={handleDelete}>Удалить</button>
-        </li>
+            </Button>
+            <Button 
+                onClick={handleDelete} 
+                color="secondary" 
+                sx={{ color: 'white', '&:hover': { backgroundColor: '#f0f0f0', color: 'black' } }}
+            >
+                Удалить
+            </Button>
+        </ListItem>
     );
 });
 
