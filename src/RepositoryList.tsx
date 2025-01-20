@@ -59,7 +59,14 @@ const RepositoryList: React.FC = observer(() => {
                     <RepoItem key={repo.id} id={repo.id} name={repo.name} />
                 ))}
             </List>
-            {loading && <CircularProgress />}
+            {loading && (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', marginTop: '20px' }}>
+                    <CircularProgress />
+                    <Typography variant="body1" style={{ marginTop: '10px' }}>
+                        Загружаем репозитории...
+                    </Typography>
+                </div>
+            )}
         </Container>
     );
 });
