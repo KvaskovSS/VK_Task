@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 
-interface Repo {
+export interface Repo {
     id: number;
     name: string;
 }

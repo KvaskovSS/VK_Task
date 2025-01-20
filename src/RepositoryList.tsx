@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import repoStore from './RepoStore';
 import RepoItem from './RepoItem';
 import { Container, List, Typography, CircularProgress } from '@mui/material';
+import { Repo } from './RepoStore';
 
 const RepositoryList: React.FC = observer(() => {
     const { repos, loading, setLoading, addRepos } = repoStore;

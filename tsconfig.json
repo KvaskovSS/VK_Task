@@ -1,7 +1,13 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "compilerOptions": {
+      "target": "ESNext",
+      "module": "CommonJS",
+      "jsx": "react",
+      "esModuleInterop": true, // Убедитесь, что это true
+      "allowSyntheticDefaultImports": true, // Также рекомендуется установить это
+      "skipLibCheck": true,
+      "strict": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }
